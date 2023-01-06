@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
+const { log } = require("console");
 
 const contactsPath = path.resolve(__dirname, "./db/contacts.json");
 
@@ -16,29 +17,45 @@ async function writeFile(db) {
 }
 
 async function listContacts() {
-  return await readFile();
+  try {
+    return await readFile();
+  } catch (e) {
+    console.log(e.message);
+  }
 }
 
 async function getContactById(contactId) {
-  const contacts = await readFile();
-  return contacts.find((contact) => contact.id === contactId);
+  try {
+    const contacts = await readFile();
+    return contacts.find((contact) => contact.id === contactId);
+  } catch (e) {
+    console.log(e.message);
+  }
 }
 
 async function removeContact(contactId) {
-  const contacts = await readFile();
-  const filteredContacts = contacts.filter(
-    (contact) => contact.id !== contactId
-  );
+  try {
+    const contacts = await readFile();
+    const filteredContacts = contacts.filter(
+      (contact) => contact.id !== contactId
+    );
 
-  writeFile(filteredContacts);
+    writeFile(filteredContacts);
+  } catch (e) {
+    console.log(e.message);
+  }
 }
 
 async function addContact(name, email, phone) {
-  const contacts = await readFile();
-  const id = nanoid();
-  contacts.push({ id, name, email, phone });
+  try {
+    const contacts = await readFile();
+    const id = nanoid();
+    contacts.push({ id, name, email, phone });
 
-  writeFile(contacts);
+    writeFile(contacts);
+  } catch (e) {
+    console.log(e.message);
+  }
 }
 
 module.exports = {
